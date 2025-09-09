@@ -13,15 +13,16 @@ const sectors = [
 ];
 
 // --- MOCK DATA ---
-const mockPMI = { label: "UK Construction PMI", value: 45.6, date: "2025-09-04" };
+const mockPMI = { label: "UK Construction PMI - Trading Econimics", value: 45.5, date: "2025-09-04" };
 const mockONS = [
-  { date: "Jan", yoy: -3.2 },
-  { date: "Feb", yoy: -4.5 },
-  { date: "Mar", yoy: -5.1 },
-  { date: "Apr", yoy: -2.9 },
-  { date: "May", yoy: -1.4 },
-  { date: "Jun", yoy: -3.7 },
-  { date: "Jul", yoy: -4.8 },
+  { date: "Jan", yoy: -10 },
+  { date: "Feb", yoy: -8.0 },
+  { date: "Mar", yoy: 4.0 },
+  { date: "Apr", yoy: 0.3 },
+  { date: "May", yoy: 2.9 },
+  { date: "Jun", yoy: 2.4 },
+  { date: "Jul", yoy: -9.0 },
+  { date: "Aug", yoy: 2.9 },
 ];
 
 const mockInsolvencies = [

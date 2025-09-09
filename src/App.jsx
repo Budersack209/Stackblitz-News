@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer } from "recharts";
-import { TrendingUp, TrendingDown, Newspaper, Factory, GraduationCap, Building, Lightbulb, Leaf, AlertCircle } from "lucide-react";
+import { TrendingUp, TrendingDown, Factory, GraduationCap, Building, Lightbulb, Leaf, AlertCircle, Newspaper } from "lucide-react";
 
-// CONFIG
+// --- CONFIG ---
 const sectors = [
   { id: "industrial", label: "Industrial/Commercial", icon: <Factory className="w-5 h-5" /> },
   { id: "health", label: "Hospitals/Healthcare", icon: <Leaf className="w-5 h-5" /> },
@@ -12,6 +12,7 @@ const sectors = [
   { id: "energy", label: "Energy & Utilities", icon: <Leaf className="w-5 h-5" /> },
 ];
 
+// --- MOCK DATA ---
 const mockPMI = { label: "UK Construction PMI", value: 45.6, date: "2025-09-04" };
 const mockONS = [
   { date: "Jan", yoy: -3.2 },
@@ -28,12 +29,14 @@ const mockInsolvencies = [
   { name: "Northern Build Co", status: "administration", updated: "2025-08-30" },
 ];
 
-const mockNews = [
-  { title: "Construction starts rise in UK", link: "#", pubDate: "2025-09-05" },
-  { title: "Developers report supply chain issues", link: "#", pubDate: "2025-09-03" },
+const marketReports = [
+  { name: "GlobalData: UK Construction Market", link: "#", description: "Sector-specific forecasts, government investments, mega-project pipeline." },
+  { name: "JLL: UK Construction Market View", link: "#", description: "Construction output trends, tender pricing, inflation, project starts." },
+  { name: "Arcadis: Spring 2025 Market View", link: "#", description: "Civil vs network infrastructure, inflation risks, projected recovery timelines." },
+  { name: "Mordor Intelligence / Access Group", link: "#", description: "New build vs retrofit, methods, geographic share, material cost trends." },
 ];
 
-// COMPONENTS
+// --- COMPONENTS ---
 function Card({ title, children }) {
   return (
     <div className="bg-white rounded-lg shadow p-4 mb-4">
@@ -57,16 +60,25 @@ function KPI({ label, value, trend }) {
   );
 }
 
-// MAIN APP
+// --- MOCK FEEDS (placeholders for RSS/Reddit) ---
+const mockNews = [
+  { title: "Construction starts rise in UK", link: "#", source: "Construction News", date: "2025-09-05" },
+  { title: "Developers report supply chain issues", link: "#", source: "Veridon News", date: "2025-09-03" },
+  { title: "Savills Research: Market outlook", link: "#", source: "Savills Research", date: "2025-09-01" },
+  { title: "PBC Today: Latest insolvencies", link: "#", source: "PBC Today", date: "2025-08-30" },
+  { title: "r/ConstructionUK: Material shortages reported", link: "#", source: "Reddit", date: "2025-09-04" },
+];
+
+// --- MAIN APP ---
 export default function App() {
   const [news, setNews] = useState(mockNews);
   const [insolvencies, setInsolvencies] = useState(mockInsolvencies);
 
-  // Simulate fetching RSS/insolvency every 10s
+  // Placeholder for future live RSS/Reddit fetch
   useEffect(() => {
     const interval = setInterval(() => {
-      setNews((prev) => [...prev]); // placeholder for real fetch
-      setInsolvencies((prev) => [...prev]); // placeholder for real fetch
+      setNews((prev) => [...prev]);
+      setInsolvencies((prev) => [...prev]);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -75,12 +87,14 @@ export default function App() {
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Geo2 Construction Dashboard</h1>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      {/* KPI Tiles */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <KPI label={mockPMI.label} value={mockPMI.value} trend="down" />
+        <KPI label="Construction Insolvencies (YTD)" value={insolvencies.length} trend={insolvencies.length > 5 ? "up" : "down"} />
+        <KPI label="Construction Output YoY" value="-4.5%" trend="down" />
       </div>
 
-      {/* Sectors */}
+      {/* Sector Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         {sectors.map((s) => (
           <div key={s.id} className="flex flex-col items-center bg-white p-4 rounded shadow">
@@ -104,7 +118,7 @@ export default function App() {
         </div>
       </Card>
 
-      {/* Insolvencies */}
+      {/* Insolvency Table */}
       <Card title="Recent Insolvencies">
         {insolvencies.map((i, idx) => (
           <div key={idx} className="flex justify-between p-2 border-b last:border-b-0">
@@ -114,14 +128,22 @@ export default function App() {
         ))}
       </Card>
 
-      {/* News */}
-      <Card title="Latest Construction News">
+      {/* News & Alerts */}
+      <Card title="Latest News & Industry Alerts">
         {news.map((n, idx) => (
           <div key={idx} className="flex flex-col p-2 border-b last:border-b-0">
-            <a href={n.link} className="font-semibold hover:underline">
-              {n.title}
-            </a>
-            <span className="text-sm text-gray-500">{n.pubDate}</span>
+            <a href={n.link} target="_blank" className="font-semibold hover:underline">{n.title}</a>
+            <span className="text-sm text-gray-500">{n.source} — {n.date}</span>
+          </div>
+        ))}
+      </Card>
+
+      {/* Market Reports / Reference */}
+      <Card title="Market Reports & Reference">
+        {marketReports.map((r, idx) => (
+          <div key={idx} className="p-2 border-b last:border-b-0">
+            <a href={r.link} target="_blank" className="font-semibold hover:underline">{r.name}</a>
+            <p className="text-sm text-gray-600">{r.description}</p>
           </div>
         ))}
       </Card>
